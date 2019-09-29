@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tgr
+  labels:
+    name: tgr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: tgr
+  template:
+    metadata:
+      name: tgr
+      labels:
+        name: tgr
+    spec:
+      imagePullSecrets:
+        - name: registry-credentials
+        # kubectl create secret docker-registry registry-credentials --docker-server="https://index.docker.io/v1/" --docker-username=cdallas --docker-password=***** --docker-email=self@chrisdallas.tech
+      containers:
+        - name: tgr
+          image: cdallas/tgr:1
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              memory: 128Mi
+            limits:
+              memory: 256Mi
+          env:
+            - name: GITHUB_READ_TOKEN
+              value: ""
+            - name: ENV
+              value: "prod"
+            - name: DEBUG
+              value: "False"
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              value: "5000"
